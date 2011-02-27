@@ -1,0 +1,3 @@
+<% directory.each_with_index { |dir, i| -%>
+<%= directory[i] %>  -fstype=cifs,rw,username=tomcat,password=<%= password[i] %> <%= mount[i] %>
+<%- } -%>
