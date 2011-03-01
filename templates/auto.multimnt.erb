@@ -1,0 +1,14 @@
+<% keys.flatten.each_index do |x| -%>
+<% if keys[x] != keys[x-1] -%>
+<%= keys[x] %> \
+<% end -%>
+          <%= mountpoints[x] %> \
+<% if ! options[x].to_s.empty? -%>
+                    <%= options[x] %> \
+<% end -%>
+                    <%= locations[x] %> \
+<% if keys[x] != keys[x+1] -%>
+
+
+<% end -%>
+<% end -%>

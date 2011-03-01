@@ -1,66 +1,72 @@
 class autofs  {
 
-	package {
-		"autofs":
-			ensure => "installed";
-	}
+  package {
+    "autofs":
+      ensure => "installed";
+  }
 
-
-
-	service {
-		"autofs":
-			enable  => "true",
-			ensure  => $ensure_service,
-			hasstatus => true, 
-			require => Package['autofs'];
-	}
+  service {
+    "autofs":
+      enable    => true,
+      ensure    => running,
+      hasstatus => true, 
+      require   => Package['autofs'];
+  }
 
 }
 
-define autofs::maps($mountpoints,
-              $maps,
-              $options=[]) 
-{
-   file {
-     "$mountpoints":
-			ensure => "directory";
+class autofs::master($mountpoints,
+                     $maps,
+                     $options=[]) {
+
+  include autofs
+
+  file {
     "/etc/auto.master":
       owner   => "root",
       group   => "root",
       mode    => 0644,
       content => template("autofs/auto.master.erb"),
+      require => Package["autofs"],
       notify  => Service["autofs"];
   }
 
+}
 
-  
+define autofs::mnt ($keys,
+                    $options,
+                    $locations) {
 
+  include autofs
 
-#		"/etc/auto.master":
-#			owner   => "root",
-#                        group   => "root",
-#                       mode    => "0644",
-#                       require => Package['autofs'],
-#                        notify  => Service['autofs'],
-#                        content => "/mnt	/etc/auto.mnt";
+  file {
+    "/etc/auto.$name":
+      owner   => "root",
+      group   => "root",
+      mode    => "0644",
+      require => Package['autofs'],
+      notify  => Service['autofs'],
+      content => template("autofs/auto.mnt.erb");
+  }
 
 }
 
+define autofs::multimnt ($keys,
+                         $mountpoints,
+                         $options,
+                         $locations) {
+
+  include autofs
+
+  file {
+    "/etc/auto.$name":
+      owner   => "root",
+      group   => "root",
+      mode    => "0644",
+      require => Package['autofs'],
+      notify  => Service['autofs'],
+      content => template("autofs/auto.multimnt.erb");
+  }
 
 
-
-
-define autofs::mnt ($directory, $password, $mount) {
-
-	include autofs
-
-	file {
-		"/etc/auto.$name":
-			owner   => "root",
-			group   => "root",
-			mode    => "0644",
-			require => Package['autofs'],
-			notify  => Service['autofs'],
-			content => template("headers/header-hash.erb","autofs/auto.mnt.erb");
-	}
 }
