@@ -6,8 +6,8 @@
 # include autofs::disable
 #
 class autofs::disable inherits autofs {
-    Service["autofs"] {
-        ensure => "stopped" ,
-        enable => "false",
+    Service['autofs'] {
+        ensure => 'stopped' ,
+        enable => false,
     }
 }
