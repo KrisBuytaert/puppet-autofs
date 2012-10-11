@@ -5,7 +5,7 @@ define autofs::mnt ($keys,
 
 
   file {
-    "/etc/auto.$name":
+    "/etc/auto.${name}":
       owner   => 'root',
       group   => 'root',
       mode    => '0644',

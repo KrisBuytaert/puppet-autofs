@@ -7,7 +7,7 @@ define autofs::multimnt ( $keys,
   include autofs
 
   file {
-    "/etc/auto.$name":
+    "/etc/auto.${name}":
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
